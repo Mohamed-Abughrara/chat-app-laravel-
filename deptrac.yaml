@@ -1,0 +1,27 @@
+# Clean Architecture layer rules (PDR NFR-09, D-08). Run: vendor/bin/deptrac analyse
+deptrac:
+  paths:
+    - ./src
+    - ./app
+  layers:
+    - name: Domain
+      collectors:
+        - { type: directory, value: src/Domain/.* }
+    - name: Application
+      collectors:
+        - { type: directory, value: src/Application/.* }
+    - name: Infrastructure
+      collectors:
+        - { type: directory, value: src/Infrastructure/.* }
+    - name: Presentation
+      collectors:
+        - { type: directory, value: app/.* }
+    - name: Laravel
+      collectors:
+        - { type: classLike, value: ^Illuminate\.* }
+        - { type: classLike, value: ^Laravel\.* }
+  ruleset:
+    Domain: []
+    Application: [Domain]
+    Infrastructure: [Application, Domain, Laravel]
+    Presentation: [Application, Domain, Infrastructure, Laravel]
